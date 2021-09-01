@@ -1,0 +1,15 @@
+package com.kurular.simpleauthenticationprovider.autoconfiguration;
+
+import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.SimpleAuthenticationProviderProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@RequiredArgsConstructor
+@Configuration
+@ConditionalOnWebApplication
+@EnableConfigurationProperties(SimpleAuthenticationProviderProperties.class)
+public class SimpleAuthenticationProviderAutoConfiguration {
+    private final SimpleAuthenticationProviderProperties properties;
+}
