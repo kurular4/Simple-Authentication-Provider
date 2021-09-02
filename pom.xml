@@ -6,6 +6,7 @@
     <modules>
         <module>auto-configuration</module>
         <module>starter</module>
+        <module>model-generator</module>
     </modules>
 
     <parent>
