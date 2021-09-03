@@ -1,4 +1,4 @@
-package com.kurular.simpleauthenticationprovider.autoconfiguration.model;
+package com.kurular.simpleauthenticationprovider.autoconfiguration.model.property;
 
 import java.time.Duration;
 
