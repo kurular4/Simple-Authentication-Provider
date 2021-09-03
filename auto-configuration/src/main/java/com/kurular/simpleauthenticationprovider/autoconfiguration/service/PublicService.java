@@ -24,7 +24,8 @@ public class PublicService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public Response<User> register(UserDTO userDTO) throws Exception {
+    // todo catch via advice
+    public Response<User> register(UserDTO userDTO) {
         if (!userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new UsernameAlreadyExistsException(userDTO.getUsername());
         }

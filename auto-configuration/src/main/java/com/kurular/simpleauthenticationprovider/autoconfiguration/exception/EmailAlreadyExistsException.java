@@ -1,6 +1,6 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.exception;
 
-public class EmailAlreadyExistsException extends Exception {
+public class EmailAlreadyExistsException extends RuntimeException {
 
     public EmailAlreadyExistsException() {
     }

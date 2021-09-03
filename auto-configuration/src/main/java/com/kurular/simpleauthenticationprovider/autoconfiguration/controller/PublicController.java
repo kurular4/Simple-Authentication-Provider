@@ -15,9 +15,7 @@ public class PublicController {
     private final PublicService publicService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response<User>> register(UserDTO userDTO) throws Exception {
+    public ResponseEntity<Response<User>> register(UserDTO userDTO) {
         return ResponseEntity.ok(publicService.register(userDTO));
     }
-
-
 }
