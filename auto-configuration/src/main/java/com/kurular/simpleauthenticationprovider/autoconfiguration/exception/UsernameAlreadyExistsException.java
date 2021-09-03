@@ -1,7 +1,7 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.exception;
 
 
-public class UsernameAlreadyExistsException extends Exception {
+public class UsernameAlreadyExistsException extends RuntimeException {
 
     public UsernameAlreadyExistsException() {
     }
