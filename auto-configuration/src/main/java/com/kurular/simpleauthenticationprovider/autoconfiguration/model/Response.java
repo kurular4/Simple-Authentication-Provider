@@ -9,5 +9,5 @@ import java.util.UUID;
 public class Response<T> {
     private String responseId = UUID.randomUUID().toString();
     private T data;
-    private LocalDateTime time;
+    private LocalDateTime time = LocalDateTime.now();
 }
