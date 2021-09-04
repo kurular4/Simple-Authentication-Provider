@@ -1,7 +1,10 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.model.property;
 
+import lombok.Getter;
+
 import java.time.Duration;
 
+@Getter
 public class Token {
     /**
      * secret key to sign token
