@@ -6,7 +6,8 @@ import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.User
 import com.kurular.simpleauthenticationprovider.autoconfiguration.service.PublicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublicController {
     private final PublicService publicService;
 
-    @PostMapping("/register")
-    public ResponseEntity<Response<User>> register(UserDTO userDTO) {
+    @PutMapping(value = "/register", consumes = "application/json")
+    public ResponseEntity<User> register(@RequestBody  UserDTO userDTO) {
         return ResponseEntity.ok(publicService.register(userDTO));
     }
 }

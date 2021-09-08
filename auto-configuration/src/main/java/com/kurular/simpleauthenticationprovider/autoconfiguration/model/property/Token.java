@@ -1,9 +1,11 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.model.property;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 
+@Setter
 @Getter
 public class Token {
     /**

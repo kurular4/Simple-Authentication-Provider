@@ -10,25 +10,25 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>model-generator</artifactId>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jsonschema2pojo</groupId>
-                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-                <version>1.0.2</version>
-                <configuration>
-                    <sourceDirectory>${basedir}/src/main/resources/schemas</sourceDirectory>
-                    <targetPackage>com.myproject.jsonschemas</targetPackage>
-                    <sourceType>json</sourceType>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.jsonschema2pojo</groupId>-->
+<!--                <artifactId>jsonschema2pojo-maven-plugin</artifactId>-->
+<!--                <version>1.0.2</version>-->
+<!--                <configuration>-->
+<!--                    <sourceDirectory>${basedir}/src/main/resources/schemas</sourceDirectory>-->
+<!--                    <targetPackage>com.myproject.jsonschemas</targetPackage>-->
+<!--                    <sourceType>json</sourceType>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 </project>
