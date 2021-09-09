@@ -1,12 +1,14 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -24,4 +26,9 @@ public class PasswordResetToken {
     private User user;
 
     private Date expiryDate;
+
+    public PasswordResetToken(User user, String token) {
+        this.user = user;
+        this.token = token;
+    }
 }
