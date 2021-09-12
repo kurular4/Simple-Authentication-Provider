@@ -8,5 +8,6 @@ import lombok.Setter;
 public class PasswordResetRequestDTO {
     private String email;
     private String username;
-    private String html;
+    private String mailSubject;
+    private String mailHtmlContent;
 }

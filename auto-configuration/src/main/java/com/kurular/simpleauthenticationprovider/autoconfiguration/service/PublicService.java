@@ -5,19 +5,14 @@ import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.Emai
 import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.MissingIdentifierException;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.UsernameAlreadyExistsException;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.PasswordResetToken;
-import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.Role;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.User;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordResetRequestDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.UserDTO;
-import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.MailProperties;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.SimpleAuthenticationProviderProperties;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.repository.PasswordResetTokenRepository;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,12 +28,12 @@ import java.util.UUID;
 @Transactional
 @Service
 public class PublicService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final SimpleAuthenticationProviderProperties properties;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
-    private final MailProperties mailProperties;
+    private final MailService mailService;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private final SimpleAuthenticationProviderProperties properties;
 
     public User register(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
@@ -80,23 +73,13 @@ public class PublicService implements UserDetailsService {
         String token = UUID.randomUUID().toString();
         createPasswordResetToken(user, token);
 
-        try {
-            // send email
-            JavaMailSender mailSender = new JavaMailSenderImpl();
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-            String htmlMsg = "<h3>Hello World!</h3>";
-            helper.setText(htmlMsg, true);
-            helper.setTo(user.getEmail());
-            helper.setSubject("This is the test message for testing gmail smtp server using spring mail");
-            helper.setFrom(mailProperties.getUsername());
-            mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e.getMessage());
+        // todo enhance return type/content
+        if (mailService.sendEmail(user.getEmail(),
+                passwordResetRequestDTO.getMailSubject(),
+                passwordResetRequestDTO.getMailHtmlContent())) {
+            return "Password reset mail sent successfully";
         }
-
-
-        return "Reset token sent successfully";
+        return "Failed";
     }
 
     public void createPasswordResetToken(User user, String token) {
