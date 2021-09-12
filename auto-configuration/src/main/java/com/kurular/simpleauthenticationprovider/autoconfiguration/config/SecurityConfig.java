@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(getAuthenticationFilter())
                 .authorizeRequests()
                 .antMatchers(HttpMethod.PUT, "/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/reset-password").permitAll()
                 .anyRequest()
                 .authenticated();
     }

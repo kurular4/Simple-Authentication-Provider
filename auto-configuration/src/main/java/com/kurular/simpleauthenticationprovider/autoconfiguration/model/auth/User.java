@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
+    private Set<String> roles = new HashSet<>();
 
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;
@@ -47,7 +47,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.name() + "_ROLE")).collect(Collectors.toSet());
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role + "_ROLE")).collect(Collectors.toSet());
     }
 
     @Override

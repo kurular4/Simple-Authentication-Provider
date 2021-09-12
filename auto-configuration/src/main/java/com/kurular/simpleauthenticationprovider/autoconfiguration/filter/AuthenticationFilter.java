@@ -53,6 +53,4 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         new ObjectMapper().writeValue(response.getOutputStream(), new ResponseEntity<>("", HttpStatus.BAD_REQUEST));
     }
-
-
 }
