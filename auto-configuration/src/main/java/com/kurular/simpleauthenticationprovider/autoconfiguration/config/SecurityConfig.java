@@ -43,12 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
-                .cors()
+                .cors().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(getAuthenticationFilter())
                 .authorizeRequests()
                 .antMatchers(HttpMethod.PUT, "/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/reset-password").permitAll()
                 .anyRequest()
                 .authenticated();
     }

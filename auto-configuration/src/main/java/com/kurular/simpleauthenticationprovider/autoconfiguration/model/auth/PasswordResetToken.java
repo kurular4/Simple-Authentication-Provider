@@ -1,18 +1,22 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.Date;
 import java.util.UUID;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
-public class PasswordResetToken {
+public class PasswordResetToken implements Serializable {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
@@ -30,5 +34,6 @@ public class PasswordResetToken {
     public PasswordResetToken(User user, String token) {
         this.user = user;
         this.token = token;
+        this.expiryDate = Date.from(Instant.now().plus(Duration.ofMillis(EXPIRATION)));
     }
 }

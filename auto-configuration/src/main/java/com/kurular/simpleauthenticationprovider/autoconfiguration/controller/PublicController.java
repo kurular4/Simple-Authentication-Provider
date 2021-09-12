@@ -1,6 +1,5 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.controller;
 
-import com.kurular.simpleauthenticationprovider.autoconfiguration.model.Response;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.User;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordResetRequestDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.UserDTO;
@@ -18,7 +17,7 @@ public class PublicController {
     private final PublicService publicService;
 
     @PutMapping(value = "/register", consumes = "application/json")
-    public ResponseEntity<User> register(@RequestBody  UserDTO userDTO) {
+    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(publicService.register(userDTO));
     }
 
