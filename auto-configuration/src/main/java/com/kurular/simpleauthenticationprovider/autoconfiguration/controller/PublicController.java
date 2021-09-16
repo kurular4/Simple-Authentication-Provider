@@ -1,6 +1,7 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.controller;
 
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.User;
+import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordChangeDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordResetRequestDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.UserDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.service.PublicService;
@@ -24,5 +25,10 @@ public class PublicController {
     @PostMapping(value = "/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
         return ResponseEntity.ok(publicService.resetPassword(passwordResetRequestDTO));
+    }
+
+    @PostMapping(value = "/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO) {
+        return ResponseEntity.ok(publicService.changePassword(passwordChangeDTO));
     }
 }

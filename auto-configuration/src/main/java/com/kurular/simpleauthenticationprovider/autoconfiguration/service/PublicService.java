@@ -2,17 +2,22 @@ package com.kurular.simpleauthenticationprovider.autoconfiguration.service;
 
 import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.EmailAlreadyExistsException;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.EmailNotFoundException;
-import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.MissingIdentifierException;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.exception.UsernameAlreadyExistsException;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.PasswordResetToken;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth.User;
+import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordChangeDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.PasswordResetRequestDTO;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.dto.UserDTO;
+import com.kurular.simpleauthenticationprovider.autoconfiguration.model.event.EmailEvent;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.SimpleAuthenticationProviderProperties;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.repository.PasswordResetTokenRepository;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.repository.UserRepository;
+import com.kurular.simpleauthenticationprovider.autoconfiguration.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,10 +35,13 @@ import java.util.UUID;
 public class PublicService implements UserDetailsService {
     private final SimpleAuthenticationProviderProperties properties;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
-    private final MailService mailService;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+
+    @Value("classpath:passwordreset-default.html")
+    private Resource resource;
 
     public User register(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
@@ -56,35 +64,30 @@ public class PublicService implements UserDetailsService {
     }
 
     public String resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
-        User user;
-
-        if (passwordResetRequestDTO.getEmail() != null) {
-            user = (User) loadByEmail(passwordResetRequestDTO.getEmail());
-        } else if (passwordResetRequestDTO.getUsername() != null) {
-            user = (User) loadUserByUsername(passwordResetRequestDTO.getUsername());
-        } else {
-            throw new MissingIdentifierException();
-        }
-
-        if (user == null) {
-            throw new RuntimeException();
-        }
+        User user = (User) loadByEmail(passwordResetRequestDTO.getEmail());
 
         String token = UUID.randomUUID().toString();
-        createPasswordResetToken(user, token);
+        passwordResetTokenRepository.save(new PasswordResetToken(user, token));
 
-        // todo enhance return type/content
-        if (mailService.sendEmail(user.getEmail(),
-                passwordResetRequestDTO.getMailSubject(),
-                passwordResetRequestDTO.getMailHtmlContent())) {
-            return "Password reset mail sent successfully";
-        }
-        return "Failed";
+        EmailEvent emailEvent = new EmailEvent(this, user.getEmail(),
+                passwordResetRequestDTO.getMailSubject(), FileUtil.asString(resource));
+        applicationEventPublisher.publishEvent(emailEvent);
+
+        return "";
     }
 
-    public void createPasswordResetToken(User user, String token) {
-        PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
-        passwordResetTokenRepository.save(passwordResetToken);
+    public String changePassword(PasswordChangeDTO passwordChangeDTO) {
+        passwordResetTokenRepository
+                .findByToken(passwordChangeDTO.getPasswordResetToken())
+                .map(PasswordResetToken::getUser)
+                .ifPresent(user -> {
+                    if (!passwordEncoder.matches(user.getPassword(), passwordChangeDTO.getOldPassword())) {
+                        throw new RuntimeException();
+                    }
+                    user.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
+                    userRepository.save(user);
+                });
+        return "";
     }
 
     public UserDetails loadByEmail(String email) {
