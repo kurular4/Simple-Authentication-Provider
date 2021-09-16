@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
-@Builder
 @Getter
 public class EmailEvent extends ApplicationEvent {
     private final String email;

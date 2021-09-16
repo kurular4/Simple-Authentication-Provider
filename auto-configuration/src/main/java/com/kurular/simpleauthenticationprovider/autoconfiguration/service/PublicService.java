@@ -63,19 +63,23 @@ public class PublicService implements UserDetailsService {
         return user;
     }
 
+    // todo enhance return type
     public String resetPassword(PasswordResetRequestDTO passwordResetRequestDTO) {
         User user = (User) loadByEmail(passwordResetRequestDTO.getEmail());
 
         String token = UUID.randomUUID().toString();
         passwordResetTokenRepository.save(new PasswordResetToken(user, token));
 
+        String resourceString = FileUtil.asString(resource).replace("${RESET_TOKEN}", token);
+
         EmailEvent emailEvent = new EmailEvent(this, user.getEmail(),
-                passwordResetRequestDTO.getMailSubject(), FileUtil.asString(resource));
+                passwordResetRequestDTO.getMailSubject(), resourceString);
         applicationEventPublisher.publishEvent(emailEvent);
 
         return "";
     }
 
+    // todo enhance return type
     public String changePassword(PasswordChangeDTO passwordChangeDTO) {
         passwordResetTokenRepository
                 .findByToken(passwordChangeDTO.getPasswordResetToken())
