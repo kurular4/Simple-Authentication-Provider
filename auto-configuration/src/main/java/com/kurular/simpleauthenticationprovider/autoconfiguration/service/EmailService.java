@@ -17,7 +17,7 @@ public class EmailService {
     private final MailProperties mailProperties;
     private final JavaMailSender javaMailSender;
 
-    public boolean sendEmail(String to, String subject, String htmlContent) {
+    public void sendEmail(String to, String subject, String htmlContent) {
         try {
             MimeMessage mail = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mail, true);
@@ -28,7 +28,6 @@ public class EmailService {
             helper.setText(htmlContent, true);
 
             javaMailSender.send(mail);
-            return true;
         } catch (MessagingException e) {
             throw new RuntimeException(e.getMessage());
         }
