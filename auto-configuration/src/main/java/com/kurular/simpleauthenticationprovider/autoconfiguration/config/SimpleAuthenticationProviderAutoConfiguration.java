@@ -3,6 +3,7 @@ package com.kurular.simpleauthenticationprovider.autoconfiguration.config;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.controller.PublicController;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.MailProperties;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.SimpleAuthenticationProviderProperties;
+import com.kurular.simpleauthenticationprovider.autoconfiguration.service.EmailService;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.service.PublicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -18,7 +19,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableConfigurationProperties({SimpleAuthenticationProviderProperties.class, MailProperties.class})
 @EnableJpaRepositories("com.kurular.simpleauthenticationprovider.autoconfiguration.repository")
 @EntityScan("com.kurular.simpleauthenticationprovider.autoconfiguration.model.*")
-@Import({PublicController.class, PublicService.class, BeanConfig.class, SecurityConfig.class})
+@Import({PublicController.class, PublicService.class, EmailService.class, BeanConfig.class, SecurityConfig.class})
 public class SimpleAuthenticationProviderAutoConfiguration {
 
 }
