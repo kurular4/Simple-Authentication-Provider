@@ -1,4 +1,4 @@
-package com.kurular.simpleauthenticationprovider.autoconfiguration.model.property;
+package com.kurular.simpleauthenticationprovider.autoconfiguration.properties;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,5 @@
-package com.kurular.simpleauthenticationprovider.autoconfiguration.annotation;
+package com.kurular.simpleauthenticationprovider.autoconfiguration.config;
 
-import com.kurular.simpleauthenticationprovider.autoconfiguration.config.SimpleAuthenticationProviderAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

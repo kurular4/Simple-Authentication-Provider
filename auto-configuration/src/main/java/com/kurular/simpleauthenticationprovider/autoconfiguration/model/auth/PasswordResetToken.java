@@ -1,16 +1,11 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.model.auth;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.TemporalAmount;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -29,11 +24,11 @@ public class PasswordResetToken implements Serializable {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private Date expiryDate;
+    private LocalDateTime expiryDate;
 
     public PasswordResetToken(User user, String token) {
         this.user = user;
         this.token = token;
-        this.expiryDate = Date.from(Instant.now().plus(Duration.ofMillis(EXPIRATION)));
+        this.expiryDate = LocalDateTime.now().plusMinutes(EXPIRATION);
     }
 }
