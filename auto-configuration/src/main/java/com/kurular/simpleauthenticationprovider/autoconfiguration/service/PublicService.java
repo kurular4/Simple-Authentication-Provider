@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -34,8 +35,8 @@ import java.util.UUID;
 @Service
 public class PublicService implements UserDetailsService {
     private final SimpleAuthenticationProviderProperties properties;
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -75,14 +76,19 @@ public class PublicService implements UserDetailsService {
         EmailEvent emailEvent = new EmailEvent(this, user.getEmail(),
                 passwordResetRequestDTO.getMailSubject(), resourceString);
         applicationEventPublisher.publishEvent(emailEvent);
-
-        return "";
+        return "Password reset instructions sent";
     }
 
     // todo enhance return type
     public String changePassword(PasswordChangeDTO passwordChangeDTO) {
         passwordResetTokenRepository
                 .findByToken(passwordChangeDTO.getPasswordResetToken())
+                .filter(passwordResetToken -> {
+                    if (passwordResetToken.getExpiryDate().isAfter(LocalDateTime.now())) {
+                        throw new RuntimeException();
+                    }
+                    return true;
+                })
                 .map(PasswordResetToken::getUser)
                 .ifPresent(user -> {
                     if (!passwordEncoder.matches(user.getPassword(), passwordChangeDTO.getOldPassword())) {
@@ -91,7 +97,8 @@ public class PublicService implements UserDetailsService {
                     user.setPassword(passwordEncoder.encode(passwordChangeDTO.getNewPassword()));
                     userRepository.save(user);
                 });
-        return "";
+
+        return "Password changed successfully";
     }
 
     public UserDetails loadByEmail(String email) {

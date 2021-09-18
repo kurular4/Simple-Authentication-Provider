@@ -1,6 +1,5 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.properties;
 
-import com.kurular.simpleauthenticationprovider.autoconfiguration.model.property.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,4 +14,5 @@ import java.util.Set;
 public class SimpleAuthenticationProviderProperties {
     private Token token;
     private Set<String> roles;
+    private Admin admin;
 }
