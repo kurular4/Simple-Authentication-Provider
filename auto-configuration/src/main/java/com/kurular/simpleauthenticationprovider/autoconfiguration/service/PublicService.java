@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -32,7 +31,6 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Transactional
-@Service
 public class PublicService implements UserDetailsService {
     private final SimpleAuthenticationProviderProperties properties;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -40,9 +38,7 @@ public class PublicService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-
-    @Value("classpath:passwordreset-default.html")
-    private Resource resource;
+    private final Resource resource;
 
     public User register(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {

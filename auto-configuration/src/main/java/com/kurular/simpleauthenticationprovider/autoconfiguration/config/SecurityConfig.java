@@ -3,7 +3,6 @@ package com.kurular.simpleauthenticationprovider.autoconfiguration.config;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.filter.AuthenticationFilter;
 import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.SimpleAuthenticationProviderProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -40,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
                 .cors().disable()
@@ -50,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.PUT, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/reset-password").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();
     }

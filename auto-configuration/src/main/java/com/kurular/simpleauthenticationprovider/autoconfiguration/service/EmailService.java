@@ -12,7 +12,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @RequiredArgsConstructor
-@Service
 public class EmailService {
     private final MailProperties mailProperties;
     private final JavaMailSender javaMailSender;
