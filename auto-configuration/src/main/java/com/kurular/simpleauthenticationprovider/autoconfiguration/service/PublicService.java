@@ -15,7 +15,6 @@ import com.kurular.simpleauthenticationprovider.autoconfiguration.repository.Use
 import com.kurular.simpleauthenticationprovider.autoconfiguration.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
