@@ -1,12 +1,11 @@
 package com.kurular.simpleauthenticationprovider.autoconfiguration.service;
 
 import com.kurular.simpleauthenticationprovider.autoconfiguration.model.event.EmailEvent;
-import com.kurular.simpleauthenticationprovider.autoconfiguration.properties.MailProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
